@@ -84,7 +84,7 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
           <div className="text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <ClockIcon className="h-4 w-4 text-white" />
-              <span className='text-white'>Started: {new Date(activeSession.InTime).toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" })}</span>
+              <span className='text-white'>Started: {new Date(activeSession.InTime).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })}</span>
             </div>
             <div className="mt-1">
               <p className='text-white font-bold'>Customer: {activeSession.CustomerName}</p>
