@@ -92,13 +92,13 @@ function DashboardContent({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#111827] text-black">
+    <div className="min-h-screen bg-[#0f1624] text-black">
       <Sidebar />
       <div className="lg:ml-80 min-h-screen">
         {/* Header for mobile */}
-        <header className="lg:hidden bg-white shadow-sm px-4 py-3 sticky top-0 z-40">
+        <header className="lg:hidden bg-[#1a2234] shadow-sm px-4 py-3 sticky top-0 z-40">
           <div className="flex items-center h-8">
-            <div className="text-lg font-semibold ml-14">
+            <div className="text-lg text-white font-semibold ml-14">
               {getPageTitle(pathname)}
             </div>
           </div>

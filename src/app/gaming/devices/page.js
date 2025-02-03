@@ -154,7 +154,7 @@ export default function DevicesPage() {
   return (
     <div className="container mx-auto px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Devices</h1>
+        <h1 className="text-2xl font-bold text-white">Devices</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
           className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
@@ -174,7 +174,7 @@ export default function DevicesPage() {
         {devices.map((device, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md p-6"
+            className="bg-[#1e293b] text-white rounded-lg shadow-md p-6"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">

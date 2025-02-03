@@ -150,7 +150,7 @@ const Sidebar = () => {
 
           {/* User Profile Section */}
           {status === 'authenticated' && session?.user && (
-            <div className="p-4 border-t border-gray-800">
+            <div className={`p-4 border-t border-gray-800 ${isOpen ? 'block' : 'hidden'}`}>
               <div className="flex items-center space-x-3 mb-4">
                 {/* User Avatar with Initials */}
                 <div className={`

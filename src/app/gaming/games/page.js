@@ -103,7 +103,7 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="p-6 text-black">
+    <div className="p-6 ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-900">Games</h1>
         <button
@@ -124,28 +124,28 @@ export default function GamesPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="bg-[#111827] rounded-lg shadow overflow-hidden">
+        <table className="min-w-full">
+          <thead className="bg-gray-800">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Game Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 Players Count
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-[#1a202c]">
             {games.map((game) => (
               <tr key={game.xata_id}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                   {game.GameName}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                   {game.PlayersCount}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -173,7 +173,7 @@ export default function GamesPage() {
             ))}
             {games.length === 0 && (
               <tr>
-                <td colSpan="3" className="px-6 py-4 text-center text-sm text-gray-500">
+                <td colSpan="3" className="px-6 py-4 text-center text-sm text-white">
                   No games found
                 </td>
               </tr>
@@ -193,7 +193,7 @@ export default function GamesPage() {
       >
         <form onSubmit={handleSubmit} className="space-y-6 text-black">
           <div>
-            <label htmlFor="gameName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="gameName" className="block text-sm font-medium text-black">
               Game Name *
             </label>
             <input
@@ -201,13 +201,13 @@ export default function GamesPage() {
               id="gameName"
               value={formData.GameName}
               onChange={(e) => setFormData({ ...formData, GameName: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block p-3 text-black w-full rounded-md border-gray-300 shadow-md shadow-gray-500 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="playersCount" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="playersCount" className="block text-sm font-medium text-black">
               Players Count *
             </label>
             <input
@@ -215,7 +215,7 @@ export default function GamesPage() {
               id="playersCount"
               value={formData.PlayersCount}
               onChange={(e) => setFormData({ ...formData, PlayersCount: parseInt(e.target.value) })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              className="mt-1 block p-3 text-black w-full rounded-md border-gray-300 shadow-md shadow-gray-500 focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               min="1"
               required
             />
@@ -251,7 +251,7 @@ export default function GamesPage() {
       >
         <form onSubmit={handleEdit} className="space-y-6">
           <div>
-            <label htmlFor="editGameName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="editGameName" className="block text-sm font-medium text-white">
               Game Name *
             </label>
             <input

@@ -202,11 +202,11 @@ export default function BookingPage() {
         </div>
       </div>
 
-      {error && (
+      {/* {error && (
         <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative">
           <span className="block sm:inline">{error}</span>
         </div>
-      )}
+      )} */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredDevices.map((device) => (
@@ -229,11 +229,11 @@ export default function BookingPage() {
         title="Book Device"
         className="bg-[#1a2234]"
       >
-        <form onSubmit={handleBookingSubmit} className="space-y-6 bg-[#1a2234]">
-          <div className=" rounded-lg p-4 border border-gray-700">
+        <form onSubmit={handleBookingSubmit} className="space-y-6 bg-white text-black">
+          <div className="bg-white rounded-lg p-4">
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label htmlFor="customerName" className="block text-sm font-medium text-white">
+                <label htmlFor="customerName" className="block text-sm font-medium">
                   Customer Name *
                 </label>
                 <input
@@ -241,13 +241,13 @@ export default function BookingPage() {
                   id="customerName"
                   value={bookingForm.CustomerName}
                   onChange={(e) => setBookingForm({ ...bookingForm, CustomerName: e.target.value })}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="customerNumber" className="block text-sm font-medium text-white">
+                <label htmlFor="customerNumber" className="block text-sm font-medium">
                   Customer Number *
                 </label>
                 <input
@@ -260,13 +260,13 @@ export default function BookingPage() {
                   }}
                   pattern="[0-9]{10}"
                   placeholder="10 digit mobile number"
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="gameSelect" className="block text-sm font-medium text-white">
+                <label htmlFor="gameSelect" className="block text-sm font-medium">
                   Select Game *
                 </label>
                 <select
@@ -280,7 +280,7 @@ export default function BookingPage() {
                       NoOfPlayers: selectedGame ? selectedGame.PlayersCount.toString() : '1'
                     });
                   }}
-                  className="form-select p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-select p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 >
                   <option value="">Select a game</option>
@@ -293,7 +293,7 @@ export default function BookingPage() {
               </div>
 
               <div>
-                <label htmlFor="noOfPlayers" className="block text-sm font-medium text-white">
+                <label htmlFor="noOfPlayers" className="block text-sm font-medium">
                   Number of Players *
                 </label>
                 <input
@@ -303,13 +303,13 @@ export default function BookingPage() {
                   max={games.find(game => game.xata_id === bookingForm.GameId)?.PlayersCount || 1}
                   value={bookingForm.NoOfPlayers}
                   onChange={(e) => setBookingForm({ ...bookingForm, NoOfPlayers: e.target.value })}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="inTime" className="block text-sm font-medium text-white">
+                <label htmlFor="inTime" className="block text-sm font-medium">
                   Start Time *
                 </label>
                 <input
@@ -334,13 +334,13 @@ export default function BookingPage() {
                     });
                   }}
                   min={new Date().toISOString().slice(0, 16)}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="outTime" className="block text-sm font-medium text-white">
+                <label htmlFor="outTime" className="block text-sm font-medium">
                   End Time *
                 </label>
                 <input
@@ -365,13 +365,13 @@ export default function BookingPage() {
                     });
                   }}
                   min={bookingForm.InTime}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="discountRate" className="block text-sm font-medium text-white">
+                <label htmlFor="discountRate" className="block text-sm font-medium">
                   Discount Rate (%)
                 </label>
                 <input
@@ -397,33 +397,35 @@ export default function BookingPage() {
                       return newForm;
                     });
                   }}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md text-black border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label htmlFor="discountAmount" className="block text-sm font-medium text-white">
+                <label htmlFor="discountAmount" className="block text-sm font-medium">
                   Discount Amount (₹)
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="discountAmount"
-                  value={`₹${parseFloat(bookingForm.DiscountAmount).toLocaleString()}`}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  disabled
+                  value={bookingForm.DiscountAmount}
+                  onChange={(e) => setBookingForm(prev => ({ ...prev, DiscountAmount: e.target.value }))}
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  min="0"
                 />
               </div>
 
               <div>
-                <label htmlFor="totalAmount" className="block text-sm font-medium text-white">
+                <label htmlFor="totalAmount" className="block text-sm font-medium">
                   Total Amount (₹)
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   id="totalAmount"
-                  value={`₹${parseFloat(bookingForm.TotalAmount).toLocaleString()}`}
-                  className="form-input p-2 text-lg mt-1 block w-full rounded-md bg-[#111827] border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  disabled
+                  value={bookingForm.TotalAmount}
+                  onChange={(e) => setBookingForm(prev => ({ ...prev, TotalAmount: e.target.value }))}
+                  className="form-input p-2 text-lg mt-1 block w-full rounded-md border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  min="0"
                 />
               </div>
             </div>
