@@ -4,9 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { 
-  HomeIcon, 
-  UsersIcon, 
+import {
+  HomeIcon,
+  UsersIcon,
   DeviceTabletIcon,
   CubeIcon,
   ClipboardDocumentListIcon,
@@ -22,7 +22,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const userRole = session?.user?.role || '';
-  
+
   // Function to get initials from username
   const getInitials = (username) => {
     if (!username) return 'U';
@@ -51,38 +51,38 @@ const Sidebar = () => {
 
   const menuItems = [
     {
-      href: '/dashboard',
+      href: '/gaming/dashboard',
       title: 'Dashboard',
       icon: HomeIcon,
       allowedRoles: ['SuperAdmin', 'Admin', 'User', 'Staff']
     },
     {
-      href: '/users',
+      href: '/gaming/users',
       title: 'Users',
       icon: UsersIcon,
       allowedRoles: ['SuperAdmin', 'Admin']
     },
     {
-      href: '/devices',
+      href: '/gaming/devices',
       title: 'Devices',
       icon: DeviceTabletIcon,
       allowedRoles: ['SuperAdmin', 'Admin']
     },
     {
-      href: '/games',
+      href: '/gaming/games',
       title: 'Games',
       icon: CubeIcon,
       allowedRoles: ['SuperAdmin', 'Admin']
     },
     {
-      href: '/booking',
+      href: '/gaming/booking',
       title: 'Booking',
       icon: ClipboardDocumentListIcon,
       allowedRoles: ['SuperAdmin', 'Admin', 'Staff']
     }
   ];
 
-  const filteredMenuItems = menuItems.filter(item => 
+  const filteredMenuItems = menuItems.filter(item =>
     item.allowedRoles.includes(userRole)
   );
 
@@ -102,7 +102,7 @@ const Sidebar = () => {
 
       {/* Overlay for mobile */}
       {isOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={() => setIsOpen(false)}
         />
@@ -133,8 +133,8 @@ const Sidebar = () => {
                       className={`
                         flex items-center space-x-3 p-3 rounded-lg
                         transition-colors duration-200
-                        ${isActive 
-                          ? 'bg-blue-700 text-white' 
+                        ${isActive
+                          ? 'bg-blue-700 text-white'
                           : 'hover:bg-blue-700'
                         }
                       `}
