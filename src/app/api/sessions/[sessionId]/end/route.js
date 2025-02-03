@@ -5,7 +5,7 @@ const xata = getXataClient();
 
 export async function POST(request, { params }) {
   try {
-    const sessionId = params.sessionId;
+    const sessionId = await params.sessionId;
 
     // Get the current session
     const session = await xata.db.sessions.read(sessionId);

@@ -7,7 +7,7 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
 
   const handleExtendSession = async () => {
     if (!activeSession) return;
-    
+
     try {
       setLoading(true);
       const response = await fetch(`/api/sessions/${activeSession.xata_id}/extend`, {
@@ -20,12 +20,12 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
           extensionMinutes: 30 // Default extension of 30 minutes
         })
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to extend session');
       }
-      
+
       onUpdate();
     } catch (error) {
       console.error('Error extending session:', error);
@@ -37,18 +37,18 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
 
   const handleEndSession = async () => {
     if (!activeSession) return;
-    
+
     try {
       setLoading(true);
       const response = await fetch(`/api/sessions/${activeSession.xata_id}/end`, {
         method: 'POST',
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || 'Failed to end session');
       }
-      
+
       onUpdate();
     } catch (error) {
       console.error('Error ending session:', error);
@@ -69,13 +69,12 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
               <div>
                 <p className='text-sm text-gray-200'>OutTime: {device.OutTime}</p>
                 <p className='text-sm text-gray-200'>Customer Name: {device.CustomerName}</p>
-                </div>
-            ) 
+              </div>
+            )
           }
         </div>
-        <div className={`px-2 py-1 rounded-full text-sm ${
-          activeSession ? 'bg-green-100 text-green-800' : 'bg-green-100 text-green-800'
-        }`}>
+        <div className={`px-2 py-1 rounded-full text-sm ${activeSession ? 'bg-green-100 text-green-800' : 'bg-green-100 text-green-800'
+          }`}>
           {activeSession ? 'In Use' : 'Available'}
         </div>
       </div>
@@ -85,13 +84,13 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
           <div className="text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <ClockIcon className="h-4 w-4 text-white" />
-              <span className='text-white'>Started: {new Date(activeSession.InTime).toLocaleTimeString()}</span>
+              <span className='text-white'>Started: {new Date(activeSession.InTime).toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" })}</span>
             </div>
             <div className="mt-1">
               <p className='text-white font-bold'>Customer: {activeSession.CustomerName}</p>
             </div>
           </div>
-          
+
           <div className="flex gap-2">
             <button
               onClick={handleExtendSession}
