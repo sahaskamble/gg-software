@@ -1,0 +1,7 @@
+{
+  "databaseURL": "https://SKZ-Tech-s-workspace-7hegsa.eu-central-1.xata.sh/db/gameground",
+  "codegen": {
+    "output": "src/xata.js",
+    "moduleType": "esm"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufj6i9f9c09ofa12r00",
+    "operations": [
+      {
+        "add_column": {
+          "table": "sessions",
+          "column": {
+            "name": "DiscountAmount",
+            "type": "float",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufj6i9f9c09ofa12r00",
+  "parent": "mig_cufj6bll59sv1v78pr9g",
+  "schema": "public",
+  "startedAt": "2025-02-02T08:56:42.595584Z"
+}

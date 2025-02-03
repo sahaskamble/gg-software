@@ -1,0 +1,25 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cuflb6ifg9llqakicp60",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Device",
+          "column": {
+            "name": "Status",
+            "type": "text",
+            "comment": "",
+            "default": "'Active'",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cuflb6ifg9llqakicp60",
+  "parent": "mig_cufkhehf9c09ofa12rg0",
+  "schema": "public",
+  "startedAt": "2025-02-02T11:23:07.545014Z"
+}

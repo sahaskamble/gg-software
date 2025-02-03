@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufjas9f9c09ofa12r6g",
+    "operations": [
+      {
+        "add_column": {
+          "table": "DeviceCategory",
+          "column": {
+            "name": "CategoryName",
+            "type": "text",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufjas9f9c09ofa12r6g",
+  "parent": "mig_cufjajtl59sv1v78prhg",
+  "schema": "public",
+  "startedAt": "2025-02-02T09:05:53.705006Z"
+}

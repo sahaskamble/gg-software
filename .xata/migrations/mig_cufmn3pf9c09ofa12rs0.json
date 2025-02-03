@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufmn3pf9c09ofa12rs0",
+    "operations": [
+      {
+        "add_column": {
+          "table": "sessions",
+          "column": {
+            "name": "Status",
+            "type": "text",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufmn3pf9c09ofa12rs0",
+  "parent": "mig_cuflrg1f9c09ofa12ro0",
+  "schema": "public",
+  "startedAt": "2025-02-02T12:56:48.331419Z"
+}

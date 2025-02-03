@@ -1,0 +1,19 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufj94dl59sv1v78preg",
+    "operations": [
+      {
+        "drop_column": {
+          "table": "Device",
+          "column": "ScreenNo"
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufj94dl59sv1v78preg",
+  "parent": "mig_cufj8rll59sv1v78prcg",
+  "schema": "public",
+  "startedAt": "2025-02-02T09:02:10.292766Z"
+}

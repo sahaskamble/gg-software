@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufisapf9c09ofa12qm0",
+    "operations": [
+      {
+        "add_column": {
+          "table": "sessions",
+          "column": {
+            "name": "CustomerNumber",
+            "type": "text",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufisapf9c09ofa12qm0",
+  "parent": "mig_cufis69f9c09ofa12ql0",
+  "schema": "public",
+  "startedAt": "2025-02-02T08:34:51.748707Z"
+}

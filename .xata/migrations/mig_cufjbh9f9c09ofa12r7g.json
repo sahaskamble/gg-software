@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufjbh9f9c09ofa12r7g",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Games",
+          "column": {
+            "name": "PlayersCount",
+            "type": "int",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufjbh9f9c09ofa12r7g",
+  "parent": "mig_cufjba5l59sv1v78prig",
+  "schema": "public",
+  "startedAt": "2025-02-02T09:07:18.323067Z"
+}

@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufj1ihf9c09ofa12qs0",
+    "operations": [
+      {
+        "add_column": {
+          "table": "sessions",
+          "column": {
+            "name": "UserId",
+            "type": "text",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufj1ihf9c09ofa12qs0",
+  "parent": "mig_cufiushf9c09ofa12qr0",
+  "schema": "public",
+  "startedAt": "2025-02-02T08:46:03.964322Z"
+}

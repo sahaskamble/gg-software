@@ -1,0 +1,94 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufip0ll59sv1v78pqvg",
+    "operations": [
+      {
+        "create_table": {
+          "name": "users",
+          "columns": [
+            {
+              "name": "table",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "column",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "type",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "title",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "unique",
+              "type": "boolean",
+              "comment": "",
+              "nullable": true
+            },
+            {
+              "name": "choices",
+              "type": "text",
+              "comment": "{\"xata.type\":\"string\"}",
+              "nullable": true
+            },
+            {
+              "name": "xata_id",
+              "type": "text",
+              "check": {
+                "name": "users_xata_id_length_xata_id",
+                "constraint": "length(\"xata_id\") < 256"
+              },
+              "unique": true,
+              "default": "'rec_' || xata_private.xid()"
+            },
+            {
+              "name": "xata_version",
+              "type": "integer",
+              "default": "0"
+            },
+            {
+              "name": "xata_createdat",
+              "type": "timestamptz",
+              "default": "now()"
+            },
+            {
+              "name": "xata_updatedat",
+              "type": "timestamptz",
+              "default": "now()"
+            }
+          ],
+          "comment": ""
+        }
+      },
+      {
+        "sql": {
+          "up": "ALTER TABLE \"users\" REPLICA IDENTITY FULL",
+          "onComplete": true
+        }
+      },
+      {
+        "sql": {
+          "up": "CREATE TRIGGER xata_maintain_metadata_trigger_pgroll\n  BEFORE INSERT OR UPDATE\n  ON \"users\"\n  FOR EACH ROW\n  EXECUTE FUNCTION xata_private.maintain_metadata_trigger_pgroll()",
+          "onComplete": true
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufip0ll59sv1v78pqvg",
+  "parent": "mig_cufil8ll59sv1v78pqtg",
+  "schema": "public",
+  "startedAt": "2025-02-02T08:27:46.708917Z"
+}

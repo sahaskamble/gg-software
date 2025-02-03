@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cufj9ihf9c09ofa12r5g",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Device",
+          "column": {
+            "name": "ControllerCount",
+            "type": "int",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cufj9ihf9c09ofa12r5g",
+  "parent": "mig_cufj99hf9c09ofa12r4g",
+  "schema": "public",
+  "startedAt": "2025-02-02T09:03:06.615235Z"
+}
