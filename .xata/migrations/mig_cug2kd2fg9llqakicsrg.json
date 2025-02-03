@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cug2kd2fg9llqakicsrg",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Snacks",
+          "column": {
+            "name": "price",
+            "type": "float",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cug2kd2fg9llqakicsrg",
+  "parent": "mig_cug2k0pf9c09ofa12v5g",
+  "schema": "public",
+  "startedAt": "2025-02-03T02:30:12.60273Z"
+}

@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import {
   HomeIcon,
-  UsersIcon,
+  AdjustmentsVerticalIcon,
   DeviceTabletIcon,
   CubeIcon,
   ClipboardDocumentListIcon,
@@ -57,10 +57,10 @@ const Sidebar = () => {
       allowedRoles: ['SuperAdmin', 'Admin', 'User', 'Staff']
     },
     {
-      href: '/gaming/users',
-      title: 'Users',
-      icon: UsersIcon,
-      allowedRoles: ['SuperAdmin', 'Admin']
+      href: '/gaming/booking',
+      title: 'Booking',
+      icon: ClipboardDocumentListIcon,
+      allowedRoles: ['SuperAdmin', 'Admin', 'Staff']
     },
     {
       href: '/gaming/devices',
@@ -75,11 +75,11 @@ const Sidebar = () => {
       allowedRoles: ['SuperAdmin', 'Admin']
     },
     {
-      href: '/gaming/booking',
-      title: 'Booking',
-      icon: ClipboardDocumentListIcon,
-      allowedRoles: ['SuperAdmin', 'Admin', 'Staff']
-    }
+      href: '/gaming/users',
+      title: 'Settings',
+      icon: AdjustmentsVerticalIcon,
+      allowedRoles: ['SuperAdmin', 'Admin']
+    },
   ];
 
   const filteredMenuItems = menuItems.filter(item =>

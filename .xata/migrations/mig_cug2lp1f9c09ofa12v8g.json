@@ -1,0 +1,24 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_cug2lp1f9c09ofa12v8g",
+    "operations": [
+      {
+        "add_column": {
+          "table": "Snacks",
+          "column": {
+            "name": "availableStock",
+            "type": "int",
+            "comment": "",
+            "nullable": true
+          }
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_cug2lp1f9c09ofa12v8g",
+  "parent": "mig_cug2lc1f9c09ofa12v7g",
+  "schema": "public",
+  "startedAt": "2025-02-03T02:33:09.314556Z"
+}

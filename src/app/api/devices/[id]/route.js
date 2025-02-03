@@ -54,27 +54,38 @@ export async function PUT(req, { params }) {
 }
 
 // DELETE device
-export async function DELETE(req, { params }) {
+export async function DELETE(req, context) {
   try {
+    const { params } = await context; // ✅ Await context
+
+    if (!params || !params.id) {
+      return NextResponse.json(
+        { error: "Device ID is missing" },
+        { status: 400 }
+      );
+    }
+
     const device = await xata.db.Device.read(params.id);
-    
+
     if (!device) {
       return NextResponse.json(
-        { error: 'Device not found' },
+        { error: "Device not found" },
         { status: 404 }
       );
     }
 
     await xata.db.Device.delete(params.id);
-    
+
     return NextResponse.json(
-      { message: 'Device deleted successfully' },
+      { message: "Device deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
+    console.error("Delete Error:", error);
     return NextResponse.json(
-      { error: 'Failed to delete device' },
+      { error: "Failed to delete device" },
       { status: 500 }
     );
   }
 }
+

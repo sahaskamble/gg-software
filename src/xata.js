@@ -224,6 +224,98 @@ const tables = [
     ],
   },
   {
+    name: "Snacks",
+    checkConstraints: {
+      Snacks_xata_id_length_xata_id: {
+        name: "Snacks_xata_id_length_xata_id",
+        columns: ["xata_id"],
+        definition: "CHECK ((length(xata_id) < 256))",
+      },
+    },
+    foreignKeys: {},
+    primaryKey: [],
+    uniqueConstraints: {
+      _pgroll_new_Snacks_xata_id_key: {
+        name: "_pgroll_new_Snacks_xata_id_key",
+        columns: ["xata_id"],
+      },
+    },
+    columns: [
+      {
+        name: "availableStock",
+        type: "int",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "category",
+        type: "multiple",
+        notNull: false,
+        unique: false,
+        defaultValue: "'{Chips,Drinks,Other}'::text[]",
+        comment: "",
+      },
+      {
+        name: "description",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "name",
+        type: "text",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "price",
+        type: "float",
+        notNull: false,
+        unique: false,
+        defaultValue: null,
+        comment: "",
+      },
+      {
+        name: "xata_createdat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_id",
+        type: "text",
+        notNull: true,
+        unique: true,
+        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
+        comment: "",
+      },
+      {
+        name: "xata_updatedat",
+        type: "datetime",
+        notNull: true,
+        unique: false,
+        defaultValue: "now()",
+        comment: "",
+      },
+      {
+        name: "xata_version",
+        type: "int",
+        notNull: true,
+        unique: false,
+        defaultValue: "0",
+        comment: "",
+      },
+    ],
+  },
+  {
     name: "customers",
     checkConstraints: {
       customers_xata_id_length_xata_id: {
@@ -545,7 +637,7 @@ const DatabaseClient = buildClient();
 const defaultOptions = {
   databaseURL:
     "https://SKZ-Tech-s-workspace-7hegsa.eu-central-1.xata.sh/db/gameground",
-    apiKey: process.env.XATA_API_KEY,
+        apiKey: process.env.XATA_API_KEY,
     branch: process.env.XATA_BRANCH,
 };
 /** @typedef { import('./types').DatabaseSchema } DatabaseSchema */

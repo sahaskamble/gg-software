@@ -182,23 +182,8 @@ export default function BookingPage() {
   return (
     <div className="p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h1 className="text-2xl font-semibold text-white">Gaming Devices</h1>
+        <h1 className="text-2xl font-semibold text-white">Booked Devices</h1>
         <div className="flex items-center gap-4 w-full sm:w-auto">
-          <div className="relative flex-1 sm:flex-none">
-            <FunnelIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="form-select pl-10 pr-4 py-2 w-full bg-[#1a2234] text-white rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.xata_id} value={category.xata_id}>
-                  {category.CategoryName}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       </div>
 

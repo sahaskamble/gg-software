@@ -3,6 +3,7 @@ import { ClockIcon, PlayIcon, StopIcon } from '@heroicons/react/24/outline';
 
 export default function DeviceCard({ device, activeSession, onUpdate, onBook }) {
   const [loading, setLoading] = useState(false);
+  console.log("Active Sessions: ", activeSession);
 
   const handleExtendSession = async () => {
     if (!activeSession) return;
@@ -63,6 +64,14 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
         <div>
           <h3 className="text-lg font-semibold text-white">{device.DeviceName}</h3>
           <p className="text-sm text-gray-200">Screen : {device.ScreenNo}</p>
+          {
+            activeSession && (
+              <div>
+                <p className='text-sm text-gray-200'>OutTime: {device.OutTime}</p>
+                <p className='text-sm text-gray-200'>Customer Name: {device.CustomerName}</p>
+                </div>
+            ) 
+          }
         </div>
         <div className={`px-2 py-1 rounded-full text-sm ${
           activeSession ? 'bg-green-100 text-green-800' : 'bg-green-100 text-green-800'
@@ -75,12 +84,11 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
         <div className="space-y-4">
           <div className="text-sm text-gray-600">
             <div className="flex items-center gap-2">
-              <ClockIcon className="h-4 w-4" />
-              <span>Started: {new Date(activeSession.InTime).toLocaleString()}</span>
+              <ClockIcon className="h-4 w-4 text-white" />
+              <span className='text-white'>Started: {new Date(activeSession.InTime).toLocaleTimeString()}</span>
             </div>
             <div className="mt-1">
-              <p>Customer: {activeSession.CustomerName}</p>
-              <p>Game: {activeSession.GameId?.GameName}</p>
+              <p className='text-white font-bold'>Customer: {activeSession.CustomerName}</p>
             </div>
           </div>
           
