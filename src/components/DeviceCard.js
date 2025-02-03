@@ -65,7 +65,7 @@ export default function DeviceCard({ device, activeSession, onUpdate, onBook }) 
           <p className="text-sm text-gray-200">Screen : {device.ScreenNo}</p>
         </div>
         <div className={`px-2 py-1 rounded-full text-sm ${
-          activeSession ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+          activeSession ? 'bg-green-100 text-green-800' : 'bg-green-100 text-green-800'
         }`}>
           {activeSession ? 'In Use' : 'Available'}
         </div>
