@@ -3,9 +3,9 @@ import { X } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 
-export function BranchInput({ value = [], onChange }) {
+export function BranchInput({ value, onChange }) {
   const [inputValue, setInputValue] = React.useState("")
-  
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && inputValue.trim()) {
       e.preventDefault()

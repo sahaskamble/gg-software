@@ -71,7 +71,7 @@ export default function AddStaffDialog({ open, onOpenChange, onSuccess }) {
         description: "Please add at least one branch",
       });
       return false;
-    } 
+    }
 
     if (formData.password.length < 6) {
       toast({
@@ -87,7 +87,7 @@ export default function AddStaffDialog({ open, onOpenChange, onSuccess }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -136,7 +136,7 @@ export default function AddStaffDialog({ open, onOpenChange, onSuccess }) {
       setLoading(false);
     }
   };
-  
+
   console.log(formData)
 
   return (

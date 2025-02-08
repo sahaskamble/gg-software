@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -31,6 +31,12 @@ const roleColors = {
 export function StaffTable({ users, currentUserRole, onRoleUpdate }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  // const [branch, setBranch] = useState(null);
+  //
+  //
+  // useEffect(() => {
+  //   
+  // }, [])
 
   const handleRoleChange = async (userId, newRole, oldRole) => {
     // Ask for confirmation before changing role
@@ -83,7 +89,7 @@ export function StaffTable({ users, currentUserRole, onRoleUpdate }) {
           </AlertDescription>
         </Alert>
       )}
-      
+
       <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>

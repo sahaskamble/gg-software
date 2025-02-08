@@ -65,7 +65,7 @@ export default function EditGameDialog({ open, onOpenChange, onSuccess, game }) 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -113,7 +113,7 @@ export default function EditGameDialog({ open, onOpenChange, onSuccess, game }) 
 
     try {
       setLoading(true);
-      const response = await fetch(`/api/games/${game._id}`, {
+      const response = await fetch(`/api/games/delete/${game._id}`, {
         method: "DELETE",
       });
 
