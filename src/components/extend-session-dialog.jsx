@@ -124,7 +124,7 @@ export function ExtendSessionDialog({
       }
 
       // Update device status
-      const deviceStatusResponse = await fetch("/api/devices/update-status", {
+      const deviceStatusResponse = await fetch("/api/device/update-status", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
