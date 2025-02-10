@@ -4,7 +4,7 @@ require('dotenv').config();
 async function clearDatabase() {
     try {
         // Connect to MongoDB
-        const mongoUri = process.env.MONGODB_URI;
+        const mongoUri = process.env.MONGODB_URL || 'mongodb://admin:admin@localhost:27017/gg-software?authSource=admin';
         if (!mongoUri) {
             throw new Error('MONGODB_URI is not defined in environment variables');
         }

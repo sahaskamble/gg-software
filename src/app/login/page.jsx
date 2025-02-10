@@ -28,6 +28,7 @@ import { useForm } from "react-hook-form"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -104,97 +105,107 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Welcome to Game Gaming</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="username"
-                rules={{ required: "Username is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your username" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                rules={{ required: "Password is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="branch"
-                rules={{ required: "Branch selection is required" }}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Branch</FormLabel>
-                    <Select
-                      disabled={!username || isLoadingBranches}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                    >
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="flex justify-center">
+          <Image
+            src="/light-logo.png"
+            alt="Game Gaming"
+            width={150}
+            height={80}
+          />
+        </div>
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Welcome to Game Gaming</CardTitle>
+            <CardDescription>Sign in to your account</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="username"
+                  rules={{ required: "Username is required" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={
-                              isLoadingBranches
-                                ? "Loading branches..."
-                                : username
-                                  ? "Select branch"
-                                  : "Enter username first"
-                            }
-                          />
-                        </SelectTrigger>
+                        <Input placeholder="Enter your username" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {branches.map((branch) => (
-                          <SelectItem
-                            key={branch.branchId}
-                            value={branch.branchId}
-                          >
-                            {branch.branchName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  rules={{ required: "Password is required" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder="Enter your password"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="branch"
+                  rules={{ required: "Branch selection is required" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Branch</FormLabel>
+                      <Select
+                        disabled={!username || isLoadingBranches}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={
+                                isLoadingBranches
+                                  ? "Loading branches..."
+                                  : username
+                                    ? "Select branch"
+                                    : "Enter username first"
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {branches.map((branch) => (
+                            <SelectItem
+                              key={branch.branchId}
+                              value={branch.branchId}
+                            >
+                              {branch.branchName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {error && (
+                  <div className="text-sm text-red-500 text-center">{error}</div>
                 )}
-              />
-              {error && (
-                <div className="text-sm text-red-500 text-center">{error}</div>
-              )}
-              <Button type="submit" className="w-full">
-                Sign In
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                <Button type="submit" className="w-full">
+                  Sign In
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

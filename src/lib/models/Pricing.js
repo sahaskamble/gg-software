@@ -10,7 +10,11 @@ const PricingSchema = new mongoose.Schema(
     multiPlayerPrice: {
       type: Number,
       default: 70,
-    }
+    },
+    overThreePlayersPrice: {
+      type: Number,
+      default: 60,
+    },
   },
   {
     timestamps: true,

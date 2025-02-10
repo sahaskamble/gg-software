@@ -26,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 export function SnackForm({ snack, onSuccessAction }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  console.log(snack);
 
   const form = useForm({
     defaultValues: {
@@ -43,7 +44,7 @@ export function SnackForm({ snack, onSuccessAction }) {
     try {
       setLoading(true);
 
-      if (!snack._id) {
+      if (!snack) {
         const response = await fetch("/api/snacks/add", {
           method: "POST",
           headers: {

@@ -1,24 +1,19 @@
 'use client';
 
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-
-  const router = useRouter();
-
-  function handleRoute() {
-    router.push('/login')
-  }
-
   return (
-    <div className="w-full min-h-screen flex flex-col gap-6 justify-center items-center">
-      <div className="text-3xl">Game Ground Where Victory Meets Vibes</div>
-      <button
-        onClick={handleRoute}
-        className="px-4 py-2 bg-blue-500 active:bg-blue-600 rounded-md shadow-gray-800 shadow-md text-lg font-bold"
-      >
-        login
-      </button>
-    </div>
+    <main className="w-full h-screen bg-slate-950 text-white flex flex-col gap-4 justify-center items-center overflow-hidden">
+      <div className='flex flex-col items-center p-4'>
+        <Image src="/light-logo.png" alt="Logo" width={200} height={200} />
+      </div>
+      <Link
+        href={'/login'}
+      className='px-4 py-2 bg-blue-500 text-white rounded active:bg-blue-600 text-base lg:text-xl font-semibold'
+      >Go to Login</Link>
+    </main>
   );
 }

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
-const MONGODB_URI = process.env.MONGODB_URL || 'mongodb://admin:admin@localhost:27017/gg-software?authSource=admin';
+const MONGODB_URI = process.env.MONGODB_URL
+// || 'mongodb://admin:admin@localhost:27017/gg-software?authSource=admin';
 
 if (!MONGODB_URI) {
   throw new Error(

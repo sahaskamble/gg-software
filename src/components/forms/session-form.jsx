@@ -26,7 +26,8 @@ export function SessionForm({ deviceId, onSuccess }) {
     numberOfPlayers: "1",
     duration: "60",
     snacks: [], // Array of { snackId, quantity }
-    discount: "0",
+    discountRate: "0",
+    discountAmt: "0",
     rewardPointsUsed: "0",
     totalAmount: "0",
   });
@@ -80,18 +81,23 @@ export function SessionForm({ deviceId, onSuccess }) {
         const pricing = await pricingResponse.json();
         const currentPricing = pricing[0]; // Get the latest pricing
 
-        // Calculate game cost
-        const isMultiplayer = parseInt(formData.numberOfPlayers) > 1;
-        const pricePerHour = isMultiplayer ? currentPricing.multiPlayerPrice : currentPricing.singlePlayerPrice;
-        let gameCost;
-        
-        if (isMultiplayer) {
-          // For multiplayer: price per hour per person * number of players * duration in hours
-          gameCost = (pricePerHour * parseInt(formData.numberOfPlayers) * (parseInt(formData.duration) / 60));
-        } else {
-          // For single player: price per hour * duration in hours
-          gameCost = (pricePerHour * (parseInt(formData.duration) / 60));
+        if (!currentPricing) {
+          throw new Error("No pricing configuration found");
         }
+
+        // Calculate game cost
+        const playerCount = parseInt(formData.numberOfPlayers);
+        const duration = parseInt(formData.duration);
+        let pricePerHour = currentPricing.singlePlayerPrice; // default to single player price
+
+        if (playerCount >= 3) {  // Changed from > 3 to >= 3
+          pricePerHour = currentPricing.overThreePlayersPrice;
+        } else if (playerCount > 1) {
+          pricePerHour = currentPricing.multiPlayerPrice;
+        }
+
+        // Calculate cost per hour for all players
+        const gameCost = (pricePerHour * playerCount * (duration / 60));
 
         // Calculate snacks cost
         const snacksCost = formData.snacks.reduce((total, item) => {
@@ -101,9 +107,17 @@ export function SessionForm({ deviceId, onSuccess }) {
 
         // Calculate total
         const subtotal = gameCost + snacksCost;
-        const discount = parseFloat(formData.discount) || 0;
+
+        // Apply discounts
+        const discountRateValue = (subtotal * (parseFloat(formData.discountRate) || 0)) / 100;
+        const flatDiscount = parseFloat(formData.discountAmt) || 0;
+        console.log("discountRateValue", discountRateValue);
+        console.log("flatDiscount", flatDiscount);
+        console.log("discountRateValue", discountRate);
+        console.log("flatDiscount", formData.discountAmt);
+
         const rewardPoints = parseFloat(formData.rewardPointsUsed) || 0;
-        const total = Math.max(0, subtotal - discount - rewardPoints);
+        const total = Math.max(0, subtotal - discountRateValue - flatDiscount - rewardPoints);
 
         setFormData(prev => ({
           ...prev,
@@ -111,6 +125,11 @@ export function SessionForm({ deviceId, onSuccess }) {
         }));
       } catch (error) {
         console.error("Error calculating total:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to calculate total amount"
+        });
       } finally {
         setCalculating(false);
       }
@@ -119,7 +138,7 @@ export function SessionForm({ deviceId, onSuccess }) {
     if (formData.gameId && formData.duration && formData.numberOfPlayers) {
       calculateTotal();
     }
-  }, [formData.gameId, formData.duration, formData.numberOfPlayers, formData.snacks, formData.discount, formData.rewardPointsUsed, games, snacks]);
+  }, [formData.gameId, formData.duration, formData.numberOfPlayers, formData.snacks, formData.discount, formData.rewardPointsUsed, games, snacks, toast]);
 
   // Update session times whenever duration changes
   useEffect(() => {
@@ -130,21 +149,21 @@ export function SessionForm({ deviceId, onSuccess }) {
   }, [formData.duration]);
 
   const formatTime = (date) => {
-    return date?.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
+    return date?.toLocaleTimeString('en-US', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
   };
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.customerName || formData.customerName.length < 2) {
+    if (!formData.customerName || formData.customerName.trim().length < 2) {
       newErrors.customerName = "Name must be at least 2 characters.";
     }
 
-    if (!formData.contactNumber || formData.contactNumber.length < 10) {
+    if (!formData.contactNumber || formData.contactNumber.trim().length < 10) {
       newErrors.contactNumber = "Contact number must be at least 10 digits.";
     }
 
@@ -152,29 +171,35 @@ export function SessionForm({ deviceId, onSuccess }) {
       newErrors.gameId = "Please select a game.";
     }
 
-    const players = parseInt(formData.numberOfPlayers);
-    if (isNaN(players) || players < 1) {
+    const players = parseInt(formData.numberOfPlayers, 10);
+    if (!formData.numberOfPlayers.trim() || isNaN(players) || players < 1) {
       newErrors.numberOfPlayers = "At least 1 player is required.";
     }
 
-    const duration = parseInt(formData.duration);
-    if (isNaN(duration) || duration < 30) {
+    const duration = parseInt(formData.duration, 10);
+    if (!formData.duration.trim() || isNaN(duration) || duration < 30) {
       newErrors.duration = "Minimum duration is 30 minutes.";
     }
 
-    const discount = parseFloat(formData.discount);
-    if (isNaN(discount) || discount < 0) {
-      newErrors.discount = "Discount cannot be negative.";
+    const discountRate = parseFloat(formData.discountRate);
+    if (!formData.discountRate.trim() || isNaN(discountRate) || discountRate < 0) {
+      newErrors.discountRate = "Discount rate cannot be negative.";
+    }
+
+    const discountAmt = parseFloat(formData.discountAmt);
+    if (!formData.discountAmt.trim() || isNaN(discountAmt) || discountAmt < 0) {
+      newErrors.discountAmt = "Discount amount cannot be negative.";
     }
 
     const rewardPoints = parseFloat(formData.rewardPointsUsed);
-    if (isNaN(rewardPoints) || rewardPoints < 0) {
+    if (!formData.rewardPointsUsed.trim() || isNaN(rewardPoints) || rewardPoints < 0) {
       newErrors.rewardPointsUsed = "Reward points cannot be negative.";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -195,7 +220,7 @@ export function SessionForm({ deviceId, onSuccess }) {
     setFormData(prev => {
       const newSnacks = [...prev.snacks];
       const index = newSnacks.findIndex(item => item.snackId === snackId);
-      
+
       if (quantity === 0 && index !== -1) {
         newSnacks.splice(index, 1);
       } else if (index !== -1) {
@@ -213,10 +238,13 @@ export function SessionForm({ deviceId, onSuccess }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log("Creating session...");
+
     if (!validateForm()) {
       return;
     }
+
+    console.log("Creating session...");
 
     try {
       setLoading(true);
@@ -291,7 +319,7 @@ export function SessionForm({ deviceId, onSuccess }) {
         title: "Success",
         description: "Session created successfully"
       });
-      
+
       onSuccess?.();
     } catch (error) {
       console.error("Error creating session:", error);
@@ -306,7 +334,7 @@ export function SessionForm({ deviceId, onSuccess }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-4 w-full max-w-2xl mx-auto p-4 overflow-y-auto max-h-[90vh]">
       <div className="space-y-2">
         <Label htmlFor="customerName">Customer Name</Label>
         <Input
@@ -399,14 +427,14 @@ export function SessionForm({ deviceId, onSuccess }) {
       {snacks.length > 0 && (
         <div className="space-y-2">
           <Label>Snacks</Label>
-          <div className="grid gap-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {snacks.map((snack) => (
-              <div key={snack._id} className="flex items-center justify-between">
-                <span>{snack.name} (₹{snack.price})</span>
+              <div key={snack._id} className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                <span className="truncate mr-2">{snack.name} (₹{snack.price})</span>
                 <Input
                   type="number"
                   min="0"
-                  className="w-20"
+                  className="w-20 min-w-[80px]"
                   value={formData.snacks.find(s => s.snackId === snack._id)?.quantity || "0"}
                   onChange={(e) => handleSnackChange(snack._id, parseInt(e.target.value) || 0)}
                 />
@@ -417,18 +445,34 @@ export function SessionForm({ deviceId, onSuccess }) {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="discount">Discount Amount</Label>
+        <Label htmlFor="discount">Discount Percentage</Label>
         <Input
-          id="discount"
-          name="discount"
+          id="discountRate"
+          name="discountRate"
           type="number"
           min="0"
           step="0.01"
-          value={formData.discount}
+          value={formData.discountRate}
           onChange={handleChange}
         />
         {errors.discount && (
-          <p className="text-sm text-red-500">{errors.discount}</p>
+          <p className="text-sm text-red-500">{errors.discountRate}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="discount">Discount Amount</Label>
+        <Input
+          id="discountAmt"
+          name="discountAmt"
+          type="number"
+          min="0"
+          step="0.01"
+          value={formData.discountAmt}
+          onChange={handleChange}
+        />
+        {errors.discount && (
+          <p className="text-sm text-red-500">{errors.discountAmt}</p>
         )}
       </div>
 

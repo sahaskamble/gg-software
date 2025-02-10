@@ -4,17 +4,21 @@ import Pricing from "@/lib/models/Pricing";
 export async function PUT(request) {
   try {
 
-    const { singlePlayerPrice, multiPlayerPrice } = await request.json();
+    const { singlePlayerPrice, multiPlayerPrice, overThreePlayersPrice } = await request.json();
+
+    console.log(singlePlayerPrice)
+    console.log(multiPlayerPrice)
+    console.log(overThreePlayersPrice)
 
     // Validate input
-    if (typeof singlePlayerPrice !== 'number' || typeof multiPlayerPrice !== 'number') {
+    if (typeof singlePlayerPrice !== 'number' || typeof multiPlayerPrice !== 'number' || typeof overThreePlayersPrice !== 'number') {
       return NextResponse.json(
         { error: "Invalid input: prices must be numbers" },
         { status: 400 }
       );
     }
 
-    if (singlePlayerPrice < 0 || multiPlayerPrice < 0) {
+    if (singlePlayerPrice < 0 || multiPlayerPrice < 0 || overThreePlayersPrice < 0) {
       return NextResponse.json(
         { error: "Invalid input: prices cannot be negative" },
         { status: 400 }
@@ -28,12 +32,14 @@ export async function PUT(request) {
       // Update existing pricing
       pricing.singlePlayerPrice = singlePlayerPrice;
       pricing.multiPlayerPrice = multiPlayerPrice;
+      pricing.overThreePlayersPrice = overThreePlayersPrice;
       await pricing.save();
     } else {
       // Create new pricing
       await Pricing.create({
         singlePlayerPrice,
         multiPlayerPrice,
+        overThreePlayersPrice,
       });
     }
 

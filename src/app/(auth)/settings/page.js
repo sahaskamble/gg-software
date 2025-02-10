@@ -21,10 +21,12 @@ export default function SettingsPage() {
   const [pricing, setPricing] = useState({
     singlePlayerPrice: "",
     multiPlayerPrice: "",
+    overThreePlayersPrice: "",
   });
   const [editValues, setEditValues] = useState({
     singlePlayerPrice: "",
     multiPlayerPrice: "",
+    overThreePlayersPrice: "",
   });
   const { toast } = useToast();
 
@@ -38,6 +40,7 @@ export default function SettingsPage() {
           const prices = {
             singlePlayerPrice: data[0].singlePlayerPrice.toString(),
             multiPlayerPrice: data[0].multiPlayerPrice.toString(),
+            overThreePlayersPrice: data[0].overThreePlayersPrice.toString(),
           };
           setPricing(prices);
           setEditValues(prices);
@@ -63,6 +66,9 @@ export default function SettingsPage() {
     setIsDialogOpen(false);
   };
 
+  console.log(editValues.multiPlayerPrice)
+  console.log(editValues.overThreePlayersPrice)
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditValues(prev => ({
@@ -74,8 +80,9 @@ export default function SettingsPage() {
   const validatePrices = () => {
     const singlePrice = parseFloat(editValues.singlePlayerPrice);
     const multiPrice = parseFloat(editValues.multiPlayerPrice);
+    const overthreeprice = parseFloat(editValues.overThreePlayersPrice);
 
-    if (isNaN(singlePrice) || isNaN(multiPrice)) {
+    if (isNaN(singlePrice) || isNaN(multiPrice) || isNaN(overthreeprice)) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -84,7 +91,7 @@ export default function SettingsPage() {
       return false;
     }
 
-    if (singlePrice < 0 || multiPrice < 0) {
+    if (singlePrice < 0 || multiPrice < 0 || overthreeprice < 0) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -107,6 +114,7 @@ export default function SettingsPage() {
         body: JSON.stringify({
           singlePlayerPrice: parseFloat(editValues.singlePlayerPrice),
           multiPlayerPrice: parseFloat(editValues.multiPlayerPrice),
+          overThreePlayersPrice: parseFloat(editValues.overThreePlayersPrice),
         }),
       });
 
@@ -136,7 +144,7 @@ export default function SettingsPage() {
       <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Settings</h1>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
+        <Card className="w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-lg md:text-xl">Pricing Settings</CardTitle>
             <Button variant="outline" size="icon" onClick={handleOpenDialog}>
@@ -144,16 +152,21 @@ export default function SettingsPage() {
             </Button>
           </CardHeader>
           <CardContent className="grid gap-6 pt-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
+            <div className="w-full flex flex-col justify-between items-start gap-4">
+              <div className="w-full">
                 <h3 className="font-medium">Single Player Price</h3>
                 <p className="text-sm text-muted-foreground">Price per hour for single player</p>
                 <p className="mt-1 text-xl md:text-2xl font-bold">₹{pricing.singlePlayerPrice}</p>
               </div>
-              <div className="md:text-right">
+              <div className="w-full">
                 <h3 className="font-medium">Multi Player Price</h3>
                 <p className="text-sm text-muted-foreground">Price per person per hour</p>
                 <p className="mt-1 text-xl md:text-2xl font-bold">₹{pricing.multiPlayerPrice}</p>
+              </div>
+              <div className="w-full">
+                <h3 className="font-medium">Players over three Price</h3>
+                <p className="text-sm text-muted-foreground">Price per person per hour</p>
+                <p className="mt-1 text-xl md:text-2xl font-bold">₹{pricing.overThreePlayersPrice}</p>
               </div>
             </div>
           </CardContent>
@@ -194,6 +207,23 @@ export default function SettingsPage() {
                   step="0.01"
                   placeholder="Enter price"
                   value={editValues.multiPlayerPrice}
+                  onChange={handleChange}
+                  className="pl-8"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Players over three Price (per person/hour)</Label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
+                <Input
+                  name="overThreePlayersPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter price"
+                  value={editValues.overThreePlayersPrice}
                   onChange={handleChange}
                   className="pl-8"
                 />

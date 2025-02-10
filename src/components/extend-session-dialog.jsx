@@ -14,11 +14,11 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Clock, Users } from "lucide-react";
 
-export function ExtendSessionDialog({ 
-  session, 
-  isOpen, 
-  onClose, 
-  onSuccess 
+export function ExtendSessionDialog({
+  session,
+  isOpen,
+  onClose,
+  onSuccess
 }) {
   const [loading, setLoading] = useState(false);
   const [calculating, setCalculating] = useState(false);
@@ -41,34 +41,30 @@ export function ExtendSessionDialog({
 
       try {
         setCalculating(true);
-        
-        // Get pricing
+
+        // Fetch pricing configuration
         const pricingResponse = await fetch("/api/pricing/fetch");
         if (!pricingResponse.ok) throw new Error("Failed to fetch pricing");
         const pricing = await pricingResponse.json();
         const currentPricing = pricing[0];
 
         const extraDurationHours = parseInt(extraDuration) / 60;
-        const newTotalPlayers = session.numberOfPlayers + parseInt(additionalPlayers);
-        const isMultiplayer = newTotalPlayers > 1;
-        const pricePerHour = isMultiplayer ? currentPricing.multiPlayerPrice : currentPricing.singlePlayerPrice;
-        
-        let newTotal = session.totalAmount; // Start with current amount
+        const additionalPlayersCount = parseInt(additionalPlayers);
+        const newTotalPlayers = session.numberOfPlayers + additionalPlayersCount;
 
-        // Calculate cost for extra duration with current players
+        let newTotal = session.totalAmount;
+
+        // Calculate cost for extra duration
         if (extraDurationHours > 0) {
-          if (isMultiplayer) {
-            newTotal += pricePerHour * session.numberOfPlayers * extraDurationHours;
-          } else {
-            newTotal += pricePerHour * extraDurationHours;
-          }
+          const pricePerHour = newTotalPlayers > 1 ? currentPricing.multiPlayerPrice : currentPricing.singlePlayerPrice;
+          newTotal += pricePerHour * session.numberOfPlayers * extraDurationHours;
         }
 
         // Calculate cost for additional players for remaining duration
-        if (parseInt(additionalPlayers) > 0) {
+        if (additionalPlayersCount > 0) {
           const remainingHours = (new Date(session.sessionEnd) - new Date()) / (1000 * 60 * 60);
-          const totalHours = remainingHours + extraDurationHours;
-          newTotal += currentPricing.multiPlayerPrice * parseInt(additionalPlayers) * totalHours;
+          const totalHours = Math.max(0, remainingHours + extraDurationHours); // Ensure non-negative total hours
+          newTotal += currentPricing.multiPlayerPrice * additionalPlayersCount * totalHours;
         }
 
         setTotalAmount(newTotal);
@@ -83,6 +79,7 @@ export function ExtendSessionDialog({
         setCalculating(false);
       }
     };
+
 
     calculateTotal();
   }, [extraDuration, additionalPlayers, session, toast]);
@@ -105,8 +102,9 @@ export function ExtendSessionDialog({
 
       // Calculate new end time
       const currentEnd = new Date(session.sessionEnd);
-      const newEndTime = new Date(currentEnd.getTime() + (duration * 60 * 1000));
+      const newEndTime = new Date(currentEnd.getTime() + duration * 60 * 1000);
 
+      // Update session details
       const response = await fetch("/api/sessions/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -116,7 +114,7 @@ export function ExtendSessionDialog({
           numberOfPlayers: session.numberOfPlayers + newPlayers,
           sessionEnd: newEndTime.toISOString(),
           totalAmount,
-          sessionStatus: "Extended"
+          sessionStatus: "Extended",
         }),
       });
 
@@ -125,36 +123,52 @@ export function ExtendSessionDialog({
         throw new Error(error.error || "Failed to extend session");
       }
 
+      // Update device status
+      const deviceStatusResponse = await fetch("/api/devices/update-status", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          deviceId: session.deviceId,
+          status: "Extended",
+        }),
+      });
+
+      if (!deviceStatusResponse.ok) {
+        const deviceError = await deviceStatusResponse.json();
+        throw new Error(deviceError.error || "Failed to update device status");
+      }
+
       toast({
         title: "Success",
-        description: "Session updated successfully",
+        description: "Session and device status updated successfully",
       });
 
       onSuccess?.();
       onClose();
     } catch (error) {
-      console.error("Error updating session:", error);
+      console.error("Error updating session or device status:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Failed to update session",
+        description: error.message || "Failed to update session or device status",
       });
     } finally {
       setLoading(false);
     }
   };
 
+
   const formatTime = (date) => {
-    return new Date(date).toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
+    return new Date(date).toLocaleTimeString('en-US', {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
   };
 
   // Calculate new end time for display
-  const newEndTime = session && parseInt(extraDuration) > 0 
-    ? new Date(new Date(session.sessionEnd).getTime() + (parseInt(extraDuration) * 60 * 1000)) 
+  const newEndTime = session && parseInt(extraDuration) > 0
+    ? new Date(new Date(session.sessionEnd).getTime() + (parseInt(extraDuration) * 60 * 1000))
     : null;
 
   return (
@@ -170,13 +184,13 @@ export function ExtendSessionDialog({
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>
-                  {session ? `${formatTime(session.sessionStart)} - ${formatTime(session.sessionEnd)}` : ''}
+                  {session ? `${formatTime(session?.sessionStart)} - ${formatTime(session?.sessionEnd)}` : ''}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" />
                 <span>
-                  {session ? `${session.numberOfPlayers} player${session.numberOfPlayers > 1 ? 's' : ''}` : ''}
+                  {session ? `${session?.numberOfPlayers} player${session?.numberOfPlayers > 1 ? 's' : ''}` : ''}
                 </span>
               </div>
             </div>
@@ -251,8 +265,8 @@ export function ExtendSessionDialog({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button 
-            onClick={handleExtend} 
+          <Button
+            onClick={handleExtend}
             disabled={loading || calculating || (parseInt(extraDuration) === 0 && parseInt(additionalPlayers) === 0)}
           >
             {loading ? (

@@ -25,7 +25,7 @@ passwordResetSchema.pre('save', async function(next) {
   if (this.isModified('token')) {
     try {
       this.token = await bcrypt.hash(this.token, SALT_ROUNDS);
-    } catch (error: any) {
+    } catch (error) {
       return next(error);
     }
   }
@@ -33,7 +33,7 @@ passwordResetSchema.pre('save', async function(next) {
 });
 
 // Method to compare token
-passwordResetSchema.methods.compareToken = async function(candidateToken: string) {
+passwordResetSchema.methods.compareToken = async function(candidateToken) {
   try {
     return await bcrypt.compare(candidateToken, this.token);
   } catch (error) {
