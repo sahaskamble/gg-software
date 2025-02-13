@@ -26,7 +26,13 @@ export const userSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(UserRole),
       required: [true, "Role is required"],
-    }
+    },
+    branches: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Branch",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -31,12 +31,11 @@ const roleColors = {
 export function StaffTable({ users, currentUserRole, onRoleUpdate }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  // const [branch, setBranch] = useState(null);
-  //
-  //
-  // useEffect(() => {
-  //   
-  // }, [])
+  const [branch, setBranch] = useState(null);
+
+  useEffect(() => {
+    // Fetch branch data if necessary
+  }, []);
 
   const handleRoleChange = async (userId, newRole, oldRole) => {
     // Ask for confirmation before changing role

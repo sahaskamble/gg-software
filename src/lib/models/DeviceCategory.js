@@ -8,6 +8,11 @@ export const deviceCategorySchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
+    },
   },
   { timestamps: true }
 );

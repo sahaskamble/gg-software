@@ -26,10 +26,6 @@ export function SnackList({ onRefresh }) {
   const [editingSnack, setEditingSnack] = useState(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchSnacks();
-  }, []);
-
   const fetchSnacks = useCallback(async () => {
     try {
       const response = await fetch("/api/snacks/fetch");
@@ -49,8 +45,11 @@ export function SnackList({ onRefresh }) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [toast]);
 
+  useEffect(() => {
+    fetchSnacks();
+  }, [fetchSnacks]);
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this snack?")) return;

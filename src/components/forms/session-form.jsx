@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Clock } from "lucide-react";
+import { useBranch } from "@/components/branch-provider";
 
 export function SessionForm({ deviceId, onSuccess }) {
   const [games, setGames] = useState([]);
@@ -30,10 +31,12 @@ export function SessionForm({ deviceId, onSuccess }) {
     discountAmt: "0",
     rewardPointsUsed: "0",
     totalAmount: "0",
+    branch: "",
   });
   const [errors, setErrors] = useState({});
   const { toast } = useToast();
   const [calculating, setCalculating] = useState(false);
+  const { currentBranch } = useBranch();
 
   useEffect(() => {
     // Fetch available games and snacks
@@ -138,7 +141,7 @@ export function SessionForm({ deviceId, onSuccess }) {
     if (formData.gameId && formData.duration && formData.numberOfPlayers) {
       calculateTotal();
     }
-  }, [formData.gameId, formData.duration, formData.numberOfPlayers, formData.snacks, formData.discount, formData.rewardPointsUsed, games, snacks, toast]);
+  }, [formData.gameId, formData.duration, formData.numberOfPlayers, formData.snacks, formData.discountRate, formData.discountAmt, formData.rewardPointsUsed, games, snacks, toast]);
 
   // Update session times whenever duration changes
   useEffect(() => {
@@ -286,7 +289,8 @@ export function SessionForm({ deviceId, onSuccess }) {
         totalAmount,
         discount,
         rewardPointsUsed,
-        sessionStatus: "Active"
+        sessionStatus: "Active",
+        branch: currentBranch,
       };
 
       // Create session

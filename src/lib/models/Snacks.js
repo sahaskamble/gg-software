@@ -12,7 +12,7 @@ export const snackSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ["Eatables", "Drinks"],
-      default: "Others",
+      default: "Eatables", // Changed default value to match enum
     },
     price: {
       type: Number,
@@ -36,6 +36,11 @@ export const snackSchema = new mongoose.Schema(
       type: String,
       enum: ["Available", "Out of Stock"],
       default: "Available",
+    },
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
     },
   },
   { timestamps: true }

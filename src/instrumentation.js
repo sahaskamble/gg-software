@@ -1,13 +1,12 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import dbConnect from './lib/db';
-import { userSchema } from './lib/models/Users';
-import { deviceSchema } from './lib/models/Device';
-import { deviceCategorySchema } from './lib/models/DeviceCategory';
-import { gameSchema } from './lib/models/Games';
+import { userSchema, UserRole } from './lib/models/Users';
+import { branchSchema } from './lib/models/Branch';
 import { snackSchema } from './lib/models/Snacks';
 import { sessionSchema } from './lib/models/Sessions';
-import { UserRole } from './lib/models/Users';
-import { UserBranchSchema } from './lib/models/UserBranches';
+import { deviceCategorySchema } from './lib/models/DeviceCategory';
+import { deviceSchema } from './lib/models/Device';
+import { PricingSchema } from './lib/models/Pricing';
 
 export async function register() {
   try {
@@ -21,13 +20,13 @@ export async function register() {
 
 async function initializeModels() {
   const modelDefinitions = [
-    { name: 'UserBranches', schema: UserBranchSchema },
     { name: 'Users', schema: userSchema },
-    { name: 'Device', schema: deviceSchema },
-    { name: 'DeviceCategory', schema: deviceCategorySchema },
-    { name: 'Game', schema: gameSchema },
+    { name: 'Branch', schema: branchSchema },
     { name: 'Snack', schema: snackSchema },
     { name: 'Session', schema: sessionSchema },
+    { name: 'DeviceCategory', schema: deviceCategorySchema },
+    { name: 'Device', schema: deviceSchema },
+    { name: 'Pricing', schema: PricingSchema },
   ];
 
   // First, initialize all models
@@ -44,28 +43,28 @@ async function initializeModels() {
 
   // Then, handle the admin user creation separately
   try {
-    const User = mongoose.model('Users');
-    const adminUser = await User.exists({});
+    const Users = mongoose.model('Users');
+    const adminExists = await Users.exists({});
 
-    if (!adminUser) {
+    if (!adminExists) {
       // Create the Super admin user
-      const superUser = await User.create({
-        username: 'Super',
-        passwordHash: 'admin123', // Will be hashed by pre-save hook
+      const superAdmin = await Users.create({
+        username: 'admin',
+        passwordHash: 'admin@123', // Will be hashed by pre-save hook
         role: UserRole.SuperAdmin,
+        email: 'admin@arcade.com'
       });
+      console.log(superAdmin);
 
       // Create default branch for Super admin
-      const UserBranches = mongoose.model('UserBranches');
-      await UserBranches.create({
-        userId: superUser._id.toString(),
-        branches: [{
-          branchId: 'main-branch',
-          branchName: 'Main Branch',
-          canAccess: true
-        }]
+      const Branch = mongoose.model('Branch');
+      await Branch.create({
+        name: 'Main Branch',
+        location: 'Dombivli',
+        createdBy: superAdmin._id
       });
-      console.log('✅ Admin user and branch created successfully');
+      console.log(await Branch.find());
+      // console.log('✅ Admin user and branch created successfully');
     }
   } catch (error) {
     console.error('❌ Error creating admin user:', error);

@@ -10,55 +10,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 
 export function DeviceForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [branches, setBranches] = useState([]);
   const { toast } = useToast();
-  
   const form = useForm({
     defaultValues: {
       name: "",
       category: "",
-      screenNumber: 1,
-      numberOfControllers: 1,
-      isAvailable: true,
+      screenNumber: "",
+      numberOfControllers: "",
+      branch: "",
     },
   });
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch("/api/deviceCategory/fetch");
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
+    const fetchBranches = async () => {
+      try {
+        const response = await fetch("/api/branches");
+        if (!response.ok) {
+          throw new Error("Failed to fetch branches");
+        }
+        const data = await response.json();
+        setBranches(data);
+      } catch (error) {
+        console.error("Error fetching branches:", error);
       }
-      const data = await response.json();
-      setCategories(data);
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load categories"
-      });
-      console.error("Error:", error);
-    }
-  };
+    };
+
+    fetchBranches();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -73,19 +58,19 @@ export function DeviceForm({ onSuccess }) {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Failed to create device");
+        throw new Error(error.message || "Failed to add device");
       }
 
       toast({
         title: "Success",
-        description: "Device added successfully"
+        description: "Device added successfully",
       });
       onSuccess?.();
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Error creating device"
+        description: error.message || "Error adding device",
       });
       console.error("Error:", error);
     } finally {
@@ -109,32 +94,19 @@ export function DeviceForm({ onSuccess }) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category._id} value={category._id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <Input placeholder="Enter category" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="screenNumber"
@@ -142,19 +114,12 @@ export function DeviceForm({ onSuccess }) {
             <FormItem>
               <FormLabel>Screen Number</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min={1}
-                  placeholder="Enter screen number"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter screen number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="numberOfControllers"
@@ -162,40 +127,32 @@ export function DeviceForm({ onSuccess }) {
             <FormItem>
               <FormLabel>Number of Controllers</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min={0}
-                  placeholder="Enter number of controllers"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter number of controllers" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
-          name="isAvailable"
+          name="branch"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-              <div className="space-y-0.5">
-                <FormLabel className="text-base">Availability</FormLabel>
-                <FormDescription>
-                  Set whether this device is currently available
-                </FormDescription>
-              </div>
+            <FormItem>
+              <FormLabel>Branch</FormLabel>
               <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <select {...field} className="input">
+                  <option value="">Select branch</option>
+                  {branches.map((branch) => (
+                    <option key={branch.id} value={branch.id}>
+                      {branch.name}
+                    </option>
+                  ))}
+                </select>
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
-
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? "Adding..." : "Add Device"}
         </Button>

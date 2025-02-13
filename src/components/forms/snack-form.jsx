@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,85 +10,53 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 
-export function SnackForm({ snack, onSuccessAction }) {
+export function SnackForm({ snack, onSuccess }) {
   const [loading, setLoading] = useState(false);
+  const [branches, setBranches] = useState([]);
   const { toast } = useToast();
-  console.log(snack);
-
   const form = useForm({
     defaultValues: {
       name: snack?.name || "",
       category: snack?.category || "Eatables",
-      price: snack?.price || 0,
-      stock: snack?.stock || 0,
+      price: snack?.price || "",
+      stock: snack?.stock || "",
       lowStockThreshold: snack?.lowStockThreshold || 5,
       description: snack?.description || "",
+      branch: "",
     },
   });
 
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await fetch("/api/branches");
+        if (!response.ok) {
+          throw new Error("Failed to fetch branches");
+        }
+        const data = await response.json();
+        setBranches(data);
+      } catch (error) {
+        console.error("Error fetching branches:", error);
+      }
+    };
+
+    fetchBranches();
+  }, []);
+
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       setLoading(true);
-
-      if (!snack) {
-        const response = await fetch("/api/snacks/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || "Failed to edit snack");
-        }
-
-        toast({
-          title: "Success",
-          description: "Snack Updated successfully"
-        });
-        onSuccessAction?.();
-      } else {
-        const response = await fetch("/api/snacks/edit", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ _id: snack._id, data }),
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || "Failed to create snack");
-        }
-
-        toast({
-          title: "Success",
-          description: "Snack added successfully"
-        });
-        onSuccessAction?.();
-      }
-
+      });
+      onSuccess?.();
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: (error instanceof Error ? error.message : "Error creating snack")
+        description: error.message || `Error ${snack ? "updating" : "adding"} snack`,
       });
       console.error("Error:", error);
     } finally {
@@ -112,29 +80,19 @@ export function SnackForm({ snack, onSuccessAction }) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="Eatables">Eatables</SelectItem>
-                  <SelectItem value="Drinks">Drinks</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <Input placeholder="Enter category" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="price"
@@ -142,20 +100,12 @@ export function SnackForm({ snack, onSuccessAction }) {
             <FormItem>
               <FormLabel>Price</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  placeholder="Enter price"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter price" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="stock"
@@ -163,19 +113,12 @@ export function SnackForm({ snack, onSuccessAction }) {
             <FormItem>
               <FormLabel>Stock</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min={0}
-                  placeholder="Enter stock quantity"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter stock" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="lowStockThreshold"
@@ -183,22 +126,12 @@ export function SnackForm({ snack, onSuccessAction }) {
             <FormItem>
               <FormLabel>Low Stock Threshold</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min={0}
-                  placeholder="Enter low stock threshold"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <Input placeholder="Enter low stock threshold" {...field} />
               </FormControl>
-              <FormDescription>
-                You will be notified when stock falls below this quantity
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="description"
@@ -206,19 +139,27 @@ export function SnackForm({ snack, onSuccessAction }) {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Enter snack description"
-                  className="resize-none"
-                  {...field}
-                />
+                <Input placeholder="Enter description" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="branch"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Branch</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter branch" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Adding..." : "Add Snack"}
+          {loading ? "Saving..." : "Save Snack"}
         </Button>
       </form>
     </Form>

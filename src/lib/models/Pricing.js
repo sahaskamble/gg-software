@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const PricingSchema = new mongoose.Schema(
+export const PricingSchema = new mongoose.Schema(
   {
     singlePlayerPrice: {
       type: Number,
@@ -14,6 +14,11 @@ const PricingSchema = new mongoose.Schema(
     overThreePlayersPrice: {
       type: Number,
       default: 60,
+    },
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
     },
   },
   {

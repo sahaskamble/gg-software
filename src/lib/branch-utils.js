@@ -7,15 +7,30 @@ export async function getBranchFromSession() {
 }
 
 export function withBranchScope(query, branch) {
+  if (!branch) return query;
   return {
     ...query,
-    branch: branch
+    branchId: branch.toLowerCase().replace(/\s+/g, '-')
   };
 }
 
-// Helper to check if user has access to specific branch data
-export function canAccessBranch(userBranch, targetBranch) {
-  // Add your branch access logic here
-  // For example, you might have super-admin branches that can access all branches
+export function canAccessBranch(userBranches, targetBranch) {
+  if (!userBranches || !targetBranch) return false;
+  return userBranches.some(
+    branch => branch.branchId === targetBranch && branch.canAccess
+  );
+}
+
+export function getBranchId(branchName) {
+  return branchName.toLowerCase().replace(/\s+/g, '-');
+}
+
+export async function validateBranchAccess(session, targetBranch) {
+  if (!session?.user) return false;
+  
+  // Super admins can access all branches
+  if (session.user.role === 'SuperAdmin') return true;
+  
+  const userBranch = session.user.branch;
   return userBranch === targetBranch;
 }

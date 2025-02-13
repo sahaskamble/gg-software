@@ -1,7 +1,6 @@
 import Users from "@/lib/models/Users";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { logger } from "@/lib/logger";
-import UserBranches from "./models/UserBranches";
+import Branch from "./models/Branch";
 
 export const authOptions = {
   providers: [
@@ -10,7 +9,7 @@ export const authOptions = {
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
-        branch: { label: "Branch", type: "text" }
+        branch: { label: "Branch", type: "text" } // Re-added branch field
       },
       async authorize(credentials, req) {
         if (!credentials?.username || !credentials?.password || !credentials?.branch) {
@@ -21,35 +20,31 @@ export const authOptions = {
         try {
           const user = await Users.findOne({ username: credentials.username });
           if (!user) {
-            logger.warn('User not found', { username: credentials.username });
+            conole.warn('User not found', { username: credentials.username });
             return null;
           }
 
           const isValid = await user.comparePassword(credentials.password);
           if (!isValid) {
-            logger.warn('Invalid password', { username: credentials.username });
+            console.warn('Invalid password', { username: credentials.username });
             return null;
           }
 
-          // Verify branch access
-          const userBranches = await UserBranches.findOne({
-            userId: user._id.toString()
+          // Find the branch by name (assuming credentials.branch contains branch name)
+          const branch = await Branch.findOne({
+            _id: credentials.branch
           });
 
-          if (!userBranches) {
-            logger.warn('No branches found for user', {
-              username: credentials.username
-            });
+          if (!branch) {
+            console.warn('Branch not found', { branch: credentials.branch });
             return null;
           }
 
-          // Check if user has access to the selected branch
-          const hasBranchAccess = userBranches.branches.some(
-            (b) => b.branchId === credentials.branch.toLowerCase().replace(/\s+/g, '-') && b.canAccess
-          );
+          // Check if user has access to this branch (either created by user or assigned to user)
+          const hasAccess = branch.createdBy.equals(user._id) || branch.branches.some(b => b.branchId === credentials.branch.toLowerCase().replace(/\s+/g, '-') && b.canAccess);
 
-          if (!hasBranchAccess) {
-            logger.warn('Branch access denied', {
+          if (!hasAccess) {
+            console.warn('Branch access denied', {
               username: credentials.username,
               branch: credentials.branch
             });
@@ -66,7 +61,7 @@ export const authOptions = {
             updatedAt: user.updatedAt
           };
         } catch (error) {
-          logger.error('Error during authentication', { error });
+          console.error('Error during authentication', { error });
           return null;
         }
       }

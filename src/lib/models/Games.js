@@ -21,6 +21,11 @@ export const gameSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
+    },
   },
   { timestamps: true }
 );

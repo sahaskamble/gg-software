@@ -187,6 +187,7 @@ export function SideNav() {
   )
 }
 
+// Move NavFooter outside of SideNav
 function NavFooter() {
   const { data: session } = useSession()
 

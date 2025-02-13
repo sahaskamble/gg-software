@@ -31,6 +31,11 @@ export const deviceSchema = new mongoose.Schema(
       enum: ["Available", "Occupied", "Extended"],
       default: "Available",
     },
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
+    },
   },
   { timestamps: true }
 );

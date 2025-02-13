@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 
 export const sessionSchema = new mongoose.Schema(
-  {
+  { 
+    branchId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Branch",
+      required: [true, "Branch is required"],
+    },
     customer: {
       name: {
         type: String,
